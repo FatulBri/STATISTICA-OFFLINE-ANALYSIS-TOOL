@@ -1,41 +1,71 @@
 # STATISTICA Offline Analysis Tool
 
-STATISTICA is an offline-first desktop and web analysis workspace for tabular research data. It combines a React interface, an Express API, and a Python scientific engine for statistics, financial modeling, psychometrics, charts, and report exports.
+STATISTICA adalah aplikasi analisis data offline untuk CSV dan Excel. Project ini menggabungkan antarmuka React, API Express, dan engine Python scientific untuk menjalankan statistik, visualisasi, analisis finansial, psikometrika, serta export laporan profesional.
 
-Your uploaded datasets are processed locally. Gemini narrative enrichment is optional and only used when `GEMINI_API_KEY` is configured and the user explicitly requests AI enhancement from the interface.
+Fokus utama project ini sederhana: **data tetap di komputer pengguna, analisis tetap jalan lokal, output tetap siap dipakai.**
 
-## Capabilities
+> Cocok untuk riset kampus, skripsi/tesis, laporan operasional, analisis transaksi, eksperimen edukasi, dan workflow data tabular yang butuh hasil cepat tanpa harus upload data ke cloud.
 
-| Area | Features |
+## Kenapa Project Ini Dibuat
+
+Banyak orang punya data Excel, tapi proses analisisnya masih lompat-lompat:
+
+- bersihkan data manual
+- pindah ke software statistik
+- screenshot grafik
+- tulis interpretasi manual
+- susun laporan lagi
+
+STATISTICA mencoba merapikan alur itu menjadi satu workspace lokal:
+
+1. Upload dataset.
+2. Cek struktur data.
+3. Pilih mapping analisis.
+4. Jalankan full offline analysis.
+5. Ambil grafik, ringkasan, narasi, dan report.
+
+## Fitur Utama
+
+| Modul | Kemampuan |
 | --- | --- |
-| Data | CSV, Excel `.xlsx` / `.xls`, workbook sheet selection, schema diagnostics |
-| Statistics | Descriptives, normality, outliers, correlation, OLS, ANOVA with Tukey, t-tests, paired tests, N-Gain |
-| Association | Chi-square and Cramer's V |
-| Classification | Binary logistic regression |
-| Psychometrics | Cronbach alpha, KMO/Bartlett, EFA scree, IRT/MIRT |
-| Financial | RSI, MACD, VaR, Sharpe ratio, GARCH, ARIMA, portfolio frontier |
-| Visuals | PNG export and interactive Plotly HTML charts |
-| Reports | HTML and Microsoft Word `.docx` outputs |
-| Narrative | Offline English/Indonesian interpretation with optional Gemini enrichment |
+| Data | CSV, Excel `.xlsx` / `.xls`, sheet selection, schema diagnostics |
+| Statistik | Descriptive stats, normality test, outlier, correlation, OLS regression, ANOVA, Tukey, t-test, paired test, N-Gain |
+| Asosiasi | Chi-square dan Cramer's V |
+| Klasifikasi | Logistic regression untuk target binary |
+| Psikometrika | Cronbach alpha, KMO/Bartlett, EFA scree, IRT/MIRT |
+| Finansial | RSI, MACD, VaR, Sharpe ratio, GARCH, ARIMA, portfolio frontier |
+| Visualisasi | Export PNG dan chart interaktif Plotly HTML |
+| Report | Export HTML, Microsoft Word `.docx`, dan paket `.zip` |
+| Narasi | Interpretasi offline Bahasa Indonesia/English, optional Gemini jika API key tersedia |
 
-## Requirements
+## Privasi Data
 
-- Windows 10/11, macOS, or Linux
-- Node.js 20+
-- Python 3.10+
-- Python scientific packages from `requirements.txt`
+STATISTICA dibuat dengan pendekatan **offline-first**.
 
-## Quick Start
+- File dataset diproses lokal.
+- Upload runtime disimpan di folder `uploads/`.
+- Output analisis disimpan di folder `output/`.
+- Gemini hanya digunakan jika `GEMINI_API_KEY` diisi dan user memilih enrichment AI.
+- Tanpa Gemini, analisis tetap berjalan offline.
 
-For day-to-day Windows use, double-click:
+## Quick Start Windows
+
+Cara paling mudah:
 
 ```text
-START_STATISTICA.bat
+Double-click START_STATISTICA.bat
 ```
 
-The launcher checks Node.js, creates `.venv-statistica`, installs Python scientific dependencies, starts the local server, and opens the browser.
+Launcher akan otomatis:
 
-Manual developer run:
+- mengecek Node.js
+- membuat environment Python `.venv-statistica`
+- menginstall dependency Python scientific
+- menginstall dependency Node jika belum ada
+- menjalankan server lokal
+- membuka browser ke `http://localhost:3000`
+
+## Quick Start Manual
 
 ```powershell
 npm install
@@ -43,36 +73,21 @@ python -m pip install -r requirements.txt
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+Lalu buka:
 
-On Windows you can also use:
-
-```powershell
-.\scripts\start-statistica.bat
+```text
+http://localhost:3000
 ```
 
-## Configuration
+## Alur Penggunaan
 
-Create `.env` from `.env.example` when you need optional runtime settings:
-
-```env
-PORT=3000
-MAX_UPLOAD_MB=100
-GEMINI_API_KEY=
-APP_URL=http://localhost:3000
-```
-
-`GEMINI_API_KEY` is optional. Leave it blank for fully offline operation.
-
-## Typical Workflow
-
-1. Upload a CSV or Excel dataset.
-2. Review the schema diagnostics and recommended analysis mapping.
-3. Adjust variables for regression, ANOVA, chi-square, finance, or psychometrics.
-4. Choose export DPI.
-5. Run full offline analysis.
-6. Review dashboard, charts, narrative, and generated reports.
-7. Download `.docx`, `.html`, or full `.zip` output.
+1. Upload file CSV atau Excel.
+2. Tunggu schema diagnostics muncul.
+3. Cek variable mapping untuk regression, ANOVA, chi-square, finance, atau psychometrics.
+4. Pilih DPI export.
+5. Klik **Run Full Offline Analysis**.
+6. Buka tab Graphics, Statistics, Financial, Psychometrics, atau Reports.
+7. Download report `.docx`, `.html`, atau paket `.zip`.
 
 ## CLI Usage
 
@@ -82,7 +97,7 @@ python statistica.py example_dataset.csv --diagnostics-only
 python statistica.py data.csv -c config.json -o ./output
 ```
 
-Example `config.json`:
+Contoh `config.json`:
 
 ```json
 {
@@ -98,54 +113,57 @@ Example `config.json`:
 }
 ```
 
-## Scripts
+## Tech Stack
+
+- React
+- TypeScript
+- Vite
+- Express
+- Python
+- pandas
+- NumPy
+- SciPy
+- statsmodels
+- scikit-learn
+- matplotlib
+- Plotly
+- python-docx
+
+## Script Penting
 
 ```bash
-npm run dev          # Express API with Vite middleware
-npm run build        # Production frontend build
-npm run start:prod   # Serve built frontend and API
+npm run dev          # Jalankan Express API + Vite middleware
+npm run build        # Build frontend production
+npm run start:prod   # Jalankan server production
 npm run lint         # TypeScript check
-npm run test:python  # Python smoke tests
+npm run test:python  # Smoke test Python pipeline
 ```
 
-## Python Runtime
-
-The recommended launcher uses a project-managed environment at `.venv-statistica/`. The backend prefers this Python automatically when it exists, then falls back to system Python.
-
-If the scientific stack looks broken, rerun `START_STATISTICA.bat`; it will repair missing dependencies without requiring users to type pip commands manually.
-
-## Production Run
-
-```powershell
-npm run build
-$env:NODE_ENV="production"
-npm run start:prod
-```
-
-The production server serves `dist/` and the API on the configured port.
-
-## Project Layout
+## Struktur Project
 
 ```text
-server.ts                  Express API and Vite/production server
-server/                    API helper modules
-src/                       React application
-src_python/                Python analysis engines
-tests/                     Python smoke tests
-scripts/                   Windows launcher scripts
+server.ts                  Express API dan Vite/production server
+server/                    Helper backend
+src/                       React frontend
+src_python/                Python analysis engine
+tests/                     Smoke test Python
+scripts/                   Launcher Windows
 statistica.py              CLI entry point
-example_dataset.csv        Demo dataset
-output/                    Generated reports at runtime
-uploads/                   Uploaded datasets at runtime
+example_dataset.csv        Dataset demo
+uploads/                   File upload runtime
+output/                    Hasil report runtime
 ```
 
-## Security Notes
+## Deployment Note
 
-- Uploads are limited by `MAX_UPLOAD_MB`.
-- Only `.csv`, `.xlsx`, and `.xls` files are accepted by the web API.
-- Runtime files are stored in `uploads/` and generated artifacts in `output/`.
-- The API validates artifact paths before serving charts, reports, or ZIP exports.
-- Python analysis is launched without shell interpolation to reduce command injection risk.
+Project ini paling cocok berjalan sebagai aplikasi lokal atau server backend penuh, karena membutuhkan:
+
+- proses Python scientific
+- upload file
+- generate chart/report
+- penyimpanan output runtime
+
+Frontend bisa dihosting di Vercel, tetapi backend analyzer lebih cocok di VPS, Railway, Render, Fly.io, atau server sendiri.
 
 ## Testing
 
@@ -154,19 +172,81 @@ npm run lint
 npm run test:python
 ```
 
-The Python smoke test runs diagnostics and a full example pipeline, then verifies that summary and report artifacts are created.
+Smoke test menjalankan diagnostics dan full pipeline pada dataset contoh, lalu memastikan `summary.json`, `report.html`, dan `report.docx` berhasil dibuat.
 
 ## Troubleshooting
 
-| Issue | Fix |
+| Masalah | Solusi |
 | --- | --- |
-| Python not found | Install Python 3.10+ and ensure it is available in PATH |
-| Scientific stack missing | Run `python -m pip install -r requirements.txt` |
-| Port already in use | Set `PORT` in `.env` or stop the existing process |
-| Excel upload fails | Ensure `openpyxl` is installed |
-| Logistic regression fails | Target column must contain exactly two classes |
-| AI narrative unavailable | Configure `GEMINI_API_KEY` or use the offline narrative |
+| Python tidak terdeteksi | Jalankan `START_STATISTICA.bat` atau install Python 3.10+ |
+| Dependency Python belum lengkap | Jalankan ulang `START_STATISTICA.bat` |
+| Port 3000 sudah dipakai | Buka `http://localhost:3000` atau hentikan proses lama |
+| Excel gagal dianalisis | Pastikan `openpyxl` terinstall |
+| Logistic regression gagal | Target harus punya tepat dua kelas |
+| AI narrative tidak muncul | Isi `GEMINI_API_KEY` atau gunakan narasi offline |
+
+## Roadmap
+
+- Packaging desktop app
+- Mode production server yang lebih rapi
+- Queue/background job untuk dataset besar
+- Template report yang lebih formal
+- Export PDF langsung dari report
+- Multi-user workspace
+- Storage adapter untuk S3-compatible object storage
+
+## Caption Threads Siap Pakai
+
+Versi pendek:
+
+```text
+Lagi bangun STATISTICA: tool analisis data offline buat CSV/Excel.
+
+Upload dataset, jalanin statistik, generate grafik, report Word/HTML, dan narasi interpretasi.
+
+Targetnya: data tetap lokal, hasil tetap profesional.
+
+Repo: https://github.com/FatulBri/STATISTICA-OFFLINE-ANALYSIS-TOOL
+```
+
+Versi lebih rame:
+
+```text
+Saya lagi develop STATISTICA, aplikasi analisis data offline untuk Excel/CSV.
+
+Sekali upload dataset, tool ini bisa bantu:
+- schema diagnostics
+- descriptive statistics
+- regression
+- ANOVA
+- chi-square
+- financial analysis
+- psychometrics
+- chart PNG/Plotly
+- report Word/HTML
+
+Yang paling saya suka: datanya tetap diproses lokal.
+
+Repo:
+https://github.com/FatulBri/STATISTICA-OFFLINE-ANALYSIS-TOOL
+```
+
+Versi personal:
+
+```text
+Project kecil-kecilan yang mulai makin serius:
+STATISTICA Offline Analysis Tool.
+
+Awalnya cuma pengen bikin alat analisis Excel/CSV yang bisa jalan lokal.
+Sekarang sudah bisa generate statistik, grafik, narasi, dan report Word/HTML.
+
+Masih terus dikembangin.
+Kalau kamu sering ngolah data, riset, skripsi, laporan bisnis, atau transaksi, mungkin ini bakal kepake.
+
+Repo:
+https://github.com/FatulBri/STATISTICA-OFFLINE-ANALYSIS-TOOL
+```
 
 ## License
 
-Use for research, education, and professional analysis workflows. Always review statistical assumptions and validate results before publication or client delivery.
+Gunakan untuk riset, edukasi, dan workflow analisis profesional. Tetap validasi asumsi statistik dan cek hasil sebelum dipakai untuk publikasi atau keputusan penting.
