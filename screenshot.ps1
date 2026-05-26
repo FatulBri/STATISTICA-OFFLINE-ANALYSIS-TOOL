@@ -1,0 +1,11 @@
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+
+$screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+$bmp = New-Object System.Drawing.Bitmap($screen.Width, $screen.Height)
+$graphics = [System.Drawing.Graphics]::FromImage($bmp)
+$graphics.CopyFromScreen($screen.Location, [System.Drawing.Point]::Empty, $screen.Size)
+$bmp.Save('C:\statistica-offline-analysis-tool\screenshot.png')
+$graphics.Dispose()
+$bmp.Dispose()
+Write-Host "Screenshot saved to C:\statistica-offline-analysis-tool\screenshot.png"

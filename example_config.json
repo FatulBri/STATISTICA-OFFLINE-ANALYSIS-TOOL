@@ -1,0 +1,19 @@
+{
+  "sheet": null,
+  "regressionTarget": "Post_Test",
+  "regressionPredictors": ["Pre_Test", "Income"],
+  "anovaTarget": "Post_Test",
+  "anovaGroup": "Group_Factor",
+  "ttestTarget": "Post_Test",
+  "ttestGroup": null,
+  "pairedPre": "Pre_Test",
+  "pairedPost": "Post_Test",
+  "chiSquareCol1": "Group_Factor",
+  "chiSquareCol2": "Satisfaction",
+  "logisticTarget": "Binary_Item1",
+  "logisticFeatures": ["Pre_Test", "Income", "Satisfaction"],
+  "priceColumn": "Asset_Price",
+  "psychometricColumns": ["Pre_Test", "Post_Test", "Income", "Satisfaction"],
+  "irtColumns": ["Binary_Item1", "Binary_Item2", "Binary_Item3", "Binary_Item4", "Binary_Item5"],
+  "exportDpi": 300
+}
